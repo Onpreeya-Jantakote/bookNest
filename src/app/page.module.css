@@ -1,0 +1,15 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 96px 24px;
+  color: var(--color-accent);
+}
+
+.tagline {
+  margin: 0 0 12px;
+  color: var(--color-text-secondary);
+}
