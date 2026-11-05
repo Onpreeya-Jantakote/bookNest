@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Lora } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
+import { SiteHeader } from "@/components/layout/site-header";
 import { booknestAntdTheme } from "@/styles/booknest-antd-theme";
 import "@/styles/globals.css";
 
@@ -32,7 +33,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body>
         <AntdRegistry>
-          <ConfigProvider theme={booknestAntdTheme}>{children}</ConfigProvider>
+          <ConfigProvider theme={booknestAntdTheme}>
+            <SiteHeader />
+            {children}
+          </ConfigProvider>
         </AntdRegistry>
       </body>
     </html>
