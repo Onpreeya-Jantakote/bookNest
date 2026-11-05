@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Booknest — Discover Your Next Read
+
+A book discovery app built with the [Open Library API](https://openlibrary.org/developers/api). Search books by title or author, browse results with covers and publication info, and open a detail page for each book.
+
+## Tech Stack
+
+- Next.js (App Router) and React
+- TypeScript (strict mode)
+- Ant Design with a custom theme
+- CSS Modules
+- Tabler Icons
+- Zod for validating external API data
+- Native Fetch API
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script          | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start the dev server     |
+| `npm run build` | Create a production build |
+| `npm run start` | Run the production build |
+| `npm run lint`  | Run ESLint               |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+src/
+├── app/                  Routing and pages (Server Components)
+├── components/
+│   ├── common/           Generic UI (EmptyState, ErrorState)
+│   └── layout/           Site-wide layout (SiteHeader)
+├── features/books/
+│   ├── api/              searchBooks(), getBookDetail()
+│   ├── schemas/          Zod schemas for Open Library responses
+│   ├── mappers/          API data → app types (pure functions)
+│   ├── types/            App types (Book, BookDetail, ...)
+│   ├── utils/            Small pure helpers
+│   └── components/       Book-specific UI
+├── lib/                  Shared helpers (fetchJson)
+└── styles/               Global CSS and Ant Design theme
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Data Flow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+Open Library API → fetchJson → Zod schema → mapper → Book / BookDetail → React components
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Design Decisions
 
-## Deploy on Vercel
+- **Functional first.** Components, mappers, and helpers are plain functions. Classes were considered (repository and service layers) but skipped: there is one data source and no shared state, so they would only add indirection.
+- **Server Components by default.** Data is fetched on the server. Only the search bar, pagination, and the error boundary are Client Components.
+- **URL as state.** The search query and page number live in the URL (`/?q=tolkien&page=2`), so links are shareable and the Back button works without extra state.
+- **Validate external data.** Open Library fields are often missing, so every optional field is modeled explicitly and checked with Zod before use.
+- **API types and app types are separate.** Mappers are the only place that knows the Open Library field names.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Git Workflow
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Branches: `feature/`, `fix/`, `refactor/`, `docs/`, `test/`, `chore/`
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/), for example `feat(books): add book search`
+- Changes reach `main` through pull requests
