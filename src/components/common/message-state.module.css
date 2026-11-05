@@ -1,0 +1,23 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.icon {
+  color: var(--color-accent);
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.description {
+  margin: 0 0 8px;
+  max-width: 420px;
+  color: var(--color-text-secondary);
+}
